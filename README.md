@@ -52,6 +52,7 @@ This is a first version based on instructions. There is room for improvements.
 
 For example :
 * add a UseCase `CreateCustomer`, so that UseCase `ComputeCartPrice` requires only a `CustomerId`, and then CustomerDetails could be retrieved from repository
+* for professional customers, there is no explicit rule regarding product prices and vat, it should be clarified
 * tests preferably should not use models, use cases, repositories to initialize the test context and assert the results
 * add in tests a `testContext.createContext(<everything needed to initialize the context>)` to setup the context before calling the use case
 * add an embedded database like h2

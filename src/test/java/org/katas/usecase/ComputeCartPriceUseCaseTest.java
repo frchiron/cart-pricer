@@ -2,12 +2,9 @@ package org.katas.usecase;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.katas.data.SomeCustomerIds;
 import org.katas.domain.api.AddProductToCartUseCase;
 import org.katas.domain.api.ComputeCartPriceUseCase;
-import org.katas.domain.model.customer.Customer;
-import org.katas.domain.model.customer.PrivateCustomer;
-import org.katas.domain.model.customer.ProfessionalCustomer;
+import org.katas.domain.model.customer.*;
 import org.katas.domain.model.Amount;
 import org.katas.domain.service.CartPricerService;
 import org.katas.domain.service.CartService;
@@ -42,7 +39,7 @@ public class ComputeCartPriceUseCaseTest {
         addProductToCartUseCase.addProductToCustomerCart(LAPTOP, ERIC_CUSTOMER_ID);
 
         // When
-        Amount cartTotalAmount = computeCartPriceUseCase.computeCartPrice(PrivateCustomer.of(ERIC_CUSTOMER_ID));
+        Amount cartTotalAmount = computeCartPriceUseCase.computeCartPrice(PrivateCustomer.of(ERIC_CUSTOMER_ID,"Eric","Brun"));
 
         // Then
         assertThat(cartTotalAmount.value()).isEqualTo(new BigDecimal(1200));
@@ -56,7 +53,7 @@ public class ComputeCartPriceUseCaseTest {
         addProductToCartUseCase.addProductToCustomerCart(LAPTOP, ERIC_CUSTOMER_ID);
 
         // When
-        Amount cartTotalAmount = computeCartPriceUseCase.computeCartPrice(PrivateCustomer.of(ERIC_CUSTOMER_ID));
+        Amount cartTotalAmount = computeCartPriceUseCase.computeCartPrice(PrivateCustomer.of(ERIC_CUSTOMER_ID,"Eric","Brun"));
 
         // Then
         assertThat(cartTotalAmount.value()).isEqualTo(new BigDecimal(2400));
@@ -72,7 +69,7 @@ public class ComputeCartPriceUseCaseTest {
         addProductToCartUseCase.addProductToCustomerCart(PHONE_HIGH_END, ERIC_CUSTOMER_ID);
 
         // When
-        Amount cartTotalAmount = computeCartPriceUseCase.computeCartPrice(PrivateCustomer.of(ERIC_CUSTOMER_ID));
+        Amount cartTotalAmount = computeCartPriceUseCase.computeCartPrice(PrivateCustomer.of(ERIC_CUSTOMER_ID,"Eric","Brun"));
 
         // Then
         assertThat(cartTotalAmount.value()).isEqualTo(new BigDecimal(3500));
@@ -85,13 +82,14 @@ public class ComputeCartPriceUseCaseTest {
         addProductToCartUseCase.addProductToCustomerCart(LAPTOP, ERIC_CUSTOMER_ID);
 
         // When & Then
-        assertThrows(IllegalArgumentException.class, () -> computeCartPriceUseCase.computeCartPrice(PrivateCustomer.of(FRANCK_CUSTOMER_ID)));
+        assertThrows(IllegalArgumentException.class, () -> computeCartPriceUseCase.computeCartPrice(PrivateCustomer.of(FRANCK_CUSTOMER_ID,"Franck","Giraud")));
     }
 
     @Test
     void compute_cart_price_for_a_high_revenue_professional_customer_when_laptop_added() {
         // Given
-        Customer danoneProfessionalCustomer = ProfessionalCustomer.of(DANONE_CUSTOMER_ID, Amount.of(11000000L,EURO));
+        Amount annualRevenue = Amount.of(11000000L,EURO);
+        Customer danoneProfessionalCustomer = ProfessionalCustomer.of(DANONE_CUSTOMER_ID, "DANONE", new Siren("45656565"), annualRevenue);
         addProductToCartUseCase.addProductToCustomerCart(LAPTOP, danoneProfessionalCustomer.getCustomerId());
 
         // When
@@ -105,7 +103,8 @@ public class ComputeCartPriceUseCaseTest {
     @Test
     void compute_cart_price_for_a_high_revenue_professional_customer_when_laptop_and_both_phones_added() {
         // Given
-        Customer danoneProfessionalCustomer = ProfessionalCustomer.of(DANONE_CUSTOMER_ID, Amount.of(11000000L,EURO));
+        Amount annualRevenue = Amount.of(11000000L,EURO);
+        Customer danoneProfessionalCustomer = ProfessionalCustomer.of(DANONE_CUSTOMER_ID, "DANONE", new Siren("45656565"), annualRevenue);
         addProductToCartUseCase.addProductToCustomerCart(LAPTOP, danoneProfessionalCustomer.getCustomerId());
         addProductToCartUseCase.addProductToCustomerCart(PHONE_MID_RANGE, danoneProfessionalCustomer.getCustomerId());
         addProductToCartUseCase.addProductToCustomerCart(PHONE_HIGH_END, danoneProfessionalCustomer.getCustomerId());
@@ -121,7 +120,8 @@ public class ComputeCartPriceUseCaseTest {
     @Test
     void compute_cart_price_for_a_professional_customer_with_low_revenue_when_laptop_added() {
         // Given
-        Customer charliesMarketProfessionalCustomer = ProfessionalCustomer.of(CHARLIES_MARKET_CUSTOMER_ID, Amount.of(9000000L,EURO));
+        Amount annualRevenue = Amount.of(9000000L,EURO);
+        Customer charliesMarketProfessionalCustomer = ProfessionalCustomer.of(CHARLIES_MARKET_CUSTOMER_ID, "CHARLIES MARKET", new Siren("85545"), annualRevenue);
         addProductToCartUseCase.addProductToCustomerCart(LAPTOP, charliesMarketProfessionalCustomer.getCustomerId());
 
         // When
@@ -135,7 +135,8 @@ public class ComputeCartPriceUseCaseTest {
     @Test
     void compute_cart_price_for_a_professional_customer_with_low_revenue_when_laptop_and_both_phones_added() {
         // Given
-        Customer charliesMarketProfessionalCustomer = ProfessionalCustomer.of(CHARLIES_MARKET_CUSTOMER_ID, Amount.of(9000000L,EURO));
+        Amount annualRevenue = Amount.of(9000000L,EURO);
+        Customer charliesMarketProfessionalCustomer = ProfessionalCustomer.of(CHARLIES_MARKET_CUSTOMER_ID, "CHARLIES MARKET", new Siren("85545"), annualRevenue);
         addProductToCartUseCase.addProductToCustomerCart(LAPTOP, charliesMarketProfessionalCustomer.getCustomerId());
         addProductToCartUseCase.addProductToCustomerCart(PHONE_MID_RANGE, charliesMarketProfessionalCustomer.getCustomerId());
         addProductToCartUseCase.addProductToCustomerCart(PHONE_HIGH_END, charliesMarketProfessionalCustomer.getCustomerId());

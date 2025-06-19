@@ -5,7 +5,7 @@ import org.katas.domain.model.pricingstrategy.ProductPricingStrategy;
 
 public class PrivateCustomer extends Customer {
 
-    public static PrivateCustomer of(CustomerId customerId) {
+    public static PrivateCustomer of(CustomerId customerId, String lastName, String firstName) {
         return new PrivateCustomer(customerId);
     }
     private PrivateCustomer(CustomerId customerId) {

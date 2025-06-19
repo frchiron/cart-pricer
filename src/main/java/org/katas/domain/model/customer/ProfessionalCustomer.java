@@ -6,17 +6,29 @@ import org.katas.domain.model.pricingstrategy.DefaultProfessionalCustomerProduct
 import org.katas.domain.model.pricingstrategy.ProductPricingStrategy;
 import org.katas.domain.model.pricingstrategy.ProfessionalCustomerWithHighRevenuePricingStrategy;
 
+import static org.katas.domain.model.customer.VatNumber.NOT_SET;
+
 public class ProfessionalCustomer extends Customer {
     public static final Amount HIGH_REVENUE_MINIMUM_LIMIT = Amount.of(10000000L, Currency.EURO);
     private final Amount annualRevenue;
+    private final VatNumber vatNumber;
+    private final String companyName;
+    private final Siren siren;
 
-    public static ProfessionalCustomer of(CustomerId customerId, Amount annualRevenue) {
-        return new ProfessionalCustomer(customerId, annualRevenue);
+    public static ProfessionalCustomer of(CustomerId customerId, String companyName, VatNumber vatNumber, Siren siren, Amount annualRevenue) {
+        return new ProfessionalCustomer(customerId, annualRevenue,companyName,siren,vatNumber);
     }
 
-    private ProfessionalCustomer(CustomerId customerId, Amount annualRevenue) {
+    public static ProfessionalCustomer of(CustomerId customerId, String companyName, Siren siren, Amount annualRevenue) {
+        return new ProfessionalCustomer(customerId, annualRevenue, companyName, siren, NOT_SET);
+    }
+
+    private ProfessionalCustomer(CustomerId customerId, Amount annualRevenue, String companyName, Siren siren, VatNumber vatNumber) {
         super(customerId);
         this.annualRevenue = annualRevenue;
+        this.siren = siren;
+        this.vatNumber = vatNumber;
+        this.companyName = companyName;
     }
 
     @Override
